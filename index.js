@@ -3,7 +3,7 @@ import { createProductCard } from "./createProductCard.js";
 import { findProductInCart } from "./utils/findProductInCart.js";
 
 const productContainer = document.getElementById("products");
-const filterContainer = document.querySelector(".side-bar")
+const filterContainer = document.querySelector(".side-bar");
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -31,6 +31,24 @@ filterContainer.addEventListener("click",(event) =>{
   );
 })
 
+function sortProductsByPrice(order) {
+  if (order === "highToLow") {
+      products.sort((a, b) => b.newPrice - a.newPrice);
+  } else if (order === "lowToHigh") {
+      products.sort((a, b) => a.newPrice - b.newPrice);
+  }
 
+  createProductCard(products, productContainer, findProductInCart, "products");
+}
+
+filterContainer.addEventListener("click", (event) => {
+  if (event.target.type === "radio") {
+      const sortType = event.target.value;
+      sortProductsByPrice(sortType);
+  }
+});
+
+// Initialize the product listing with the default order (High to Low)
+sortProductsByPrice("highToLow");
 createProductCard(products,productContainer,findProductInCart,"products");
 
